@@ -38,6 +38,19 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+  donations:
+    build:
+      context: .
+      dockerfile: ./apps/donations/Dockerfile
+      target: development
+    command: pnpm run start:dev payments
+    env_file:
+      - ./apps/donations/.env
+    ports:
+      - '3003:3003'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
   db:
     image: mongo
   rabbit:

@@ -2,7 +2,7 @@ import { CampaignDocument, CampaignSchema } from './models/campaign.schema';
 import { Inject, Module } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
 import { CampaignsController } from './campaigns.controller';
-import { DatabaseModule, LoggerModule, AUTH_SERVICE, PAYMENT_SERVICE } from '@app/common';
+import { DatabaseModule, LoggerModule, AUTH_SERVICE, DONATION_SERVICE } from '@app/common';
 import { CampaignsRepository } from './campaigns.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi'
@@ -36,12 +36,12 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     },
     {
       imports: [ConfigModule],
-      name: PAYMENT_SERVICE,
+      name: DONATION_SERVICE,
       useFactory: (configService: ConfigService) => ({
         transport: Transport.RMQ,
         options: {
           urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
-          queue: 'payments',
+          queue: 'donations',
         }
       }),
       inject: [ConfigService]

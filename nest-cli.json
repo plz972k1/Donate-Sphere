@@ -43,6 +43,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/payments/tsconfig.app.json"
       }
+    },
+    "donations": {
+      "type": "application",
+      "root": "apps/donations",
+      "entryFile": "main",
+      "sourceRoot": "apps/donations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/donations/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
