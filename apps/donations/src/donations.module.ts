@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi'
 import { LoggerModule } from 'nestjs-pino';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AUTH_SERVICE, PAYMENT_SERVICE } from '@app/common';
+import { AUTH_SERVICE, CAMPAIGN_SERVICE, PAYMENT_SERVICE } from '@app/common';
 
 @Module({
   imports: [
@@ -41,6 +41,18 @@ import { AUTH_SERVICE, PAYMENT_SERVICE } from '@app/common';
           }
         }),
         inject: [ConfigService],
+      },
+      {
+        imports: [ConfigModule],
+        name: CAMPAIGN_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URI')],
+            queue: 'campaigns'
+          },
+        }),
+        inject: [ConfigService]
       },
     ]),
   ],

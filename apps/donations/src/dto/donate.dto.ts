@@ -1,4 +1,4 @@
-import { IsDate, IsDefined, IsNotEmpty, IsNotEmptyObject, IsString, ValidateNested } from "class-validator";
+import { IsDate, IsDefined, IsNotEmpty, IsNotEmptyObject, IsNumber, IsString, ValidateNested } from "class-validator";
 import { CardDto } from "./card.dto";
 import { Type } from "class-transformer";
 
@@ -13,4 +13,8 @@ export class DonateDto {
     @ValidateNested()
     @Type(() => CardDto)
     card: CardDto;
+
+    @IsNumber()
+    @IsNotEmpty()
+    amount: number;
 }

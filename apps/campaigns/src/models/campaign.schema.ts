@@ -22,7 +22,7 @@ export class CampaignDocument extends AbstractDocument{
     creatorId: string;
 
     @Prop({ default: [] })
-    donors: string[];
+    donations: string[];
 
     @Prop({default: false})
     isClosed: boolean;
