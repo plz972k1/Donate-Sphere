@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import { NestFactory } from '@nestjs/core';
 import { DonationsModule } from './donations.module';
 import { ConfigService } from '@nestjs/config';
@@ -12,7 +13,8 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.RMQ,
     options: {
-      urls: configService.getOrThrow<string>('RABBITMQ_URI')
+      urls: configService.getOrThrow<string>('RABBITMQ_URI'),
+      queue: 'donations'
     }
   });
   app.use(cookieParser());

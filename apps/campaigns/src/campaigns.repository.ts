@@ -1,7 +1,6 @@
 import { AbstractRepository } from "@app/common";
-import { Injectable } from "@nestjs/common/decorators";
+import { Injectable, Logger } from "@nestjs/common";
 import { CampaignDocument } from "./models/campaign.schema";
-import { Logger } from "@nestjs/common/services";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 

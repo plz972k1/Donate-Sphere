@@ -9,7 +9,8 @@ export class JwtAuthGuard implements CanActivate {
     constructor(@Inject(AUTH_SERVICE) private readonly authClient: ClientProxy) {}
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        const jwt = context.switchToHttp().getRequest().cookies?.Authentication;
+        const jwt = context.switchToHttp().getRequest().cookies?.Authentication ||
+                    context.switchToHttp().getRequest().headers?.authentication;
         if (!jwt) {
             return false;
         }
@@ -22,5 +23,5 @@ export class JwtAuthGuard implements CanActivate {
             }),
             map(() => true)
             )
-    }
+    }   
 }

@@ -2,7 +2,7 @@ import { CampaignsRepository } from './campaigns.repository';
 import { Injectable, Param } from '@nestjs/common';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
 @Injectable()
 export class CampaignsService {
@@ -39,13 +39,12 @@ export class CampaignsService {
     return this.campaignsRepository.findOneAndDelete({_id});
   }
 
-  @EventPattern('donation_created')
-  async handleDonationCreated(data: {donationId: string, campaignId: string, donationAmount: number}) {
+  async handleDonationCreated(data: any) {
     const { donationId, campaignId, donationAmount } = data;
 
     await this.campaignsRepository.findOneAndUpdate(
       { _id: campaignId },
-      { $addToSet: { donations: donationId }, $inc: { amount: donationAmount } },
+      { $addToSet: { donations: donationId }, $inc: { currentAmount: donationAmount } },
     );
   }
 }

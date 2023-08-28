@@ -43,7 +43,7 @@ services:
       context: .
       dockerfile: ./apps/donations/Dockerfile
       target: development
-    command: pnpm run start:dev payments
+    command: pnpm run start:dev donations
     env_file:
       - ./apps/donations/.env
     ports:

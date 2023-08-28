@@ -3,6 +3,8 @@ import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { async } from 'rxjs';
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -36,5 +38,10 @@ export class CampaignsController {
   @Delete(':id')
   async remove(@Param('id') _id: string) {
     return this.campaignsService.remove(""+_id);
+  }
+
+  @EventPattern('donation_created')
+  async handleDonationCreated(@Payload() data: any) {
+    return this.campaignsService.handleDonationCreated(data);
   }
 }

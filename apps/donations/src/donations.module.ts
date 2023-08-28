@@ -3,9 +3,10 @@ import { DonationsController } from './donations.controller';
 import { DonationsService } from './donations.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi'
-import { LoggerModule } from 'nestjs-pino';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AUTH_SERVICE, CAMPAIGN_SERVICE, PAYMENT_SERVICE } from '@app/common';
+import { AUTH_SERVICE, CAMPAIGN_SERVICE, PAYMENT_SERVICE, LoggerModule, DatabaseModule } from '@app/common';
+import { DonationsRepository } from './donations.repository';
+import { DonationDocument, DonationSchema } from './models/donate.schema';
 
 @Module({
   imports: [
@@ -16,6 +17,9 @@ import { AUTH_SERVICE, CAMPAIGN_SERVICE, PAYMENT_SERVICE } from '@app/common';
         RABBITMQ_URI: Joi.string().required(),
       })
     }),
+    DatabaseModule, 
+    DatabaseModule.forFeature([
+      {name: DonationDocument.name, schema: DonationSchema}]),
     LoggerModule,
     ClientsModule.registerAsync([
       {
@@ -57,6 +61,6 @@ import { AUTH_SERVICE, CAMPAIGN_SERVICE, PAYMENT_SERVICE } from '@app/common';
     ]),
   ],
   controllers: [DonationsController],
-  providers: [DonationsService],
+  providers: [DonationsService, DonationsRepository],
 })
 export class DonationsModule {}

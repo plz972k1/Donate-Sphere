@@ -7,9 +7,16 @@ import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
 export class DonationsController {
   constructor(private readonly donationsService: DonationsService) {}
 
-  @Post('donate')
   @UseGuards(JwtAuthGuard)
+  @Post('donate')
   async donate(@Body() donateDto: DonateDto, @CurrentUser() user: UserDto) {
+    console.log(`oy ${user._id}`)
     return this.donationsService.donate(donateDto, user._id);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getAllDonations() {
+    return this.donationsService.getAllDonations();
   }
 }

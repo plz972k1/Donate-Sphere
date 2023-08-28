@@ -3,6 +3,7 @@ import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi'
+import { LoggerModule } from '@app/common';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import * as Joi from 'joi'
         RABBITMQ_URI: Joi.string().required(),
         STRIPE_SECRET_KEY: Joi.string().required(),
       })
-    })
+    }),
+    LoggerModule,
   ],
   controllers: [PaymentsController],
   providers: [PaymentsService],

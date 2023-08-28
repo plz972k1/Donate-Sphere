@@ -16,27 +16,32 @@ export class DonationsService {
 
   donate(donateDto: DonateDto, donorId: string) {
     const card: CardDto = donateDto.card;
+    const donationAmount = donateDto.amount;
 
     return this.paymentsService.send('create_charge', {
       card,
+      donationAmount,
     })
       .pipe(
         map(async (res) => {
 
-            const donation = await this.donationsRepository.create({
-              ...donateDto,
-              createdAt: new Date(),
-              donorId,
-            });
+          const donation = await this.donationsRepository.create({
+            ...donateDto,
+            createdAt: new Date(),
+            donorId: donorId,
+          });
             
-            this.campaignService.emit('donation_created', {
-              donationId: donation._id,
-              campaignId: donateDto.campaignId,
-              amount: donateDto.amount,
-            });
+          await this.campaignService.emit('donation_created', {
+            donationId: donation._id.toString(),
+            campaignId: donateDto.campaignId,
+            donationAmount,
+          }).subscribe();
           
         }),
       )
+  }
 
+  getAllDonations() {
+    return this.donationsRepository.find();
   }
 }
