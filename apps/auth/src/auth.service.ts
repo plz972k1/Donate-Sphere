@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -27,6 +27,14 @@ export class AuthService {
             httpOnly: true,
             expires,
         });
+    }
+
+    async logout(response: Response) {
+      response.clearCookie('Authentication');
+
+      return response.json({
+        message: 'Logged out successfully'
+      });
     }
 
 }
