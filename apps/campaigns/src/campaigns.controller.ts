@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { async } from 'rxjs';
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -21,6 +20,13 @@ export class CampaignsController {
   async findAll() {
     return this.campaignsService.findAll();
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('search')
+  search(@Query('keyword') keyword: string) {
+    return this.campaignsService.search(keyword);
+  }
+
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')

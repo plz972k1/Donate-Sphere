@@ -13,4 +13,21 @@ export class DonationsRepository extends AbstractRepository<DonationDocument> {
         @InjectModel(DonationDocument.name) donationModel: Model<DonationDocument>) {
             super(donationModel);
         }
+    
+    async findUserDonations(userId: string) {
+        const donations = await this.model.find({
+            donorId: { $regex: userId, $options: 'i' },
+        });
+            
+        return donations;
+    }
+
+    async findCampaignDonations(campaignId: string) {
+        const donations = await this.model.find({
+            campaignId: { $regex: campaignId, $options: 'i' }},
+            {}, { lean: true }
+        )
+        
+        return donations;
+    }
 }

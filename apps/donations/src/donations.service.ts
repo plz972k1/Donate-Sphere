@@ -1,20 +1,19 @@
 import { map } from 'rxjs';
 import { Inject, Injectable } from '@nestjs/common';
-import { CardDto } from './dto/card.dto';
 import { DonationsRepository } from './donations.repository';
-import { CAMPAIGN_SERVICE, PAYMENT_SERVICE } from '@app/common';
+import { CAMPAIGN_SERVICE, NOTIFICATION_SERVICE, PAYMENT_SERVICE, UserDto, DonateDto, CardDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { DonateDto } from './dto/donate.dto';
 
 @Injectable()
 export class DonationsService {
   constructor(
     private readonly donationsRepository: DonationsRepository,
     @Inject(PAYMENT_SERVICE) private readonly paymentsService: ClientProxy,
-    @Inject(CAMPAIGN_SERVICE) private readonly campaignService: ClientProxy
+    @Inject(CAMPAIGN_SERVICE) private readonly campaignService: ClientProxy,
+    @Inject(NOTIFICATION_SERVICE) private readonly notificationsService: ClientProxy
   ) {}
 
-  donate(donateDto: DonateDto, donorId: string) {
+  async donate(donateDto: DonateDto, user: UserDto) {
     const card: CardDto = donateDto.card;
     const donationAmount = donateDto.amount;
 
@@ -24,18 +23,22 @@ export class DonationsService {
     })
       .pipe(
         map(async (res) => {
-
+          
           const donation = await this.donationsRepository.create({
             ...donateDto,
             createdAt: new Date(),
-            donorId: donorId,
+            donorId: user._id,
+          });
+
+          this.notificationsService.emit('notify_donors', {
+            email: user.email.toString(),
           });
             
-          await this.campaignService.emit('donation_created', {
+          this.campaignService.emit('donation_created', {
             donationId: donation._id.toString(),
             campaignId: donateDto.campaignId,
             donationAmount,
-          }).subscribe();
+          });
           
         }),
       )
@@ -43,5 +46,13 @@ export class DonationsService {
 
   getAllDonations() {
     return this.donationsRepository.find();
+  }
+
+  getUserDonationHistory(userId: string) {
+    return this.donationsRepository.findUserDonations(userId);
+  }
+
+  getCampaignDonations(campaignId: string) {
+    return this.donationsRepository.findCampaignDonations(campaignId);
   }
 }

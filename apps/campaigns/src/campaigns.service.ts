@@ -47,4 +47,9 @@ export class CampaignsService {
       { $addToSet: { donations: donationId }, $inc: { currentAmount: donationAmount } },
     );
   }
+
+  async search(keyword: string) {
+    const searchResults = await this.campaignsRepository.search(keyword);
+    return searchResults;
+  }
 }

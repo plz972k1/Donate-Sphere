@@ -12,4 +12,12 @@ export class CampaignsRepository extends AbstractRepository<CampaignDocument> {
         @InjectModel(CampaignDocument.name) campaignModel: Model<CampaignDocument>) {
             super(campaignModel);
         }
+
+    async search(keyword: string) {
+        const searchResults = await this.model.find({
+            title: { $regex: keyword, $options: 'i' },
+        });
+        
+        return searchResults;
+    }
 }

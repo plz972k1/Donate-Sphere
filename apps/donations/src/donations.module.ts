@@ -4,7 +4,7 @@ import { DonationsService } from './donations.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi'
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AUTH_SERVICE, CAMPAIGN_SERVICE, PAYMENT_SERVICE, LoggerModule, DatabaseModule } from '@app/common';
+import { AUTH_SERVICE, CAMPAIGN_SERVICE, PAYMENT_SERVICE, LoggerModule, DatabaseModule, NOTIFICATION_SERVICE } from '@app/common';
 import { DonationsRepository } from './donations.repository';
 import { DonationDocument, DonationSchema } from './models/donate.schema';
 
@@ -54,6 +54,18 @@ import { DonationDocument, DonationSchema } from './models/donate.schema';
           options: {
             urls: [configService.get<string>('RABBITMQ_URI')],
             queue: 'campaigns'
+          },
+        }),
+        inject: [ConfigService]
+      },
+      {
+        imports: [ConfigModule],
+        name: NOTIFICATION_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URI')],
+            queue: 'notifications'
           },
         }),
         inject: [ConfigService]
