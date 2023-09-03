@@ -1,6 +1,7 @@
 import * as nodemailer from 'nodemailer'
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NotifyDonorDto } from '@app/common';
 
 @Injectable()
 export class NotificationsService {
@@ -17,15 +18,13 @@ export class NotificationsService {
     }
   })
 
-  async notifyDonorByEmail(data: any) {
-    const { email } = data
+  async notifyDonorByEmail({ email, amount, campaignTitle }: NotifyDonorDto) {
 
-    await console.log(`email: ${email}, ${email.toString()}`)
     this.transporter.sendMail({
       from: this.configService.get('SMTP_USER'),
       to: email,
       subject: 'Donate Sphere Notification',
-      text: 'text'
+      text: `We wanted to take a moment to express our deepest gratitude for your generous donation of ${amount} to our campaign, ${campaignTitle}. Your support means the world to us and brings us one step closer to achieving our goals.`
     })
   }
 }

@@ -1,3 +1,5 @@
 export * from './user.dto'
 export * from './card.dto'
 export * from './donate.dto'
+export * from './donation-to-campaign.dto'
+export * from './notify-donors.dto'

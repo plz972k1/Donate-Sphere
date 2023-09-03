@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } f
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
-import { EventPattern, Payload } from '@nestjs/microservices';
+import { CurrentUser, DonateDto, DonationToCampaignDto, JwtAuthGuard, UserDto } from '@app/common';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -19,6 +19,11 @@ export class CampaignsController {
   @Get()
   async findAll() {
     return this.campaignsService.findAll();
+  }
+
+  @MessagePattern('donation_created')
+  async handleDonationCreated(@Payload() data: DonationToCampaignDto) {
+    return this.campaignsService.handleDonationCreated(data);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -46,8 +51,4 @@ export class CampaignsController {
     return this.campaignsService.remove(""+_id);
   }
 
-  @EventPattern('donation_created')
-  async handleDonationCreated(@Payload() data: any) {
-    return this.campaignsService.handleDonationCreated(data);
-  }
 }

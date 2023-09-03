@@ -1,7 +1,6 @@
-import { Stripe } from 'stripe';
-
+import { CardDto } from '@app/common';
 
 export class CreateChargeDto {
-    card: Stripe.PaymentMethodCreateParams.Card1;
+    card: CardDto;
     donationAmount: number;
 }
