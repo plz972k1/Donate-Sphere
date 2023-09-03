@@ -22,10 +22,29 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Key Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Campaign Creation:** Charities, non-profits, and individuals can create and manage fundraising campaigns, sharing their causes with a global audience.
 
+- **User-Friendly Donations:** Donors can easily browse, search, and contribute to campaigns they're passionate about, making donations with confidence.
+
+- **User Authentication:** Secure user accounts and authentication mechanisms ensure the safety of personal and financial information.
+
+- **Donation History:** Donors can view their donation history, making it simple to track their charitable contributions.
+
+- **Real-Time Notifications:** Donors receive notifications and updates on campaigns they've supported, fostering a sense of connection and transparency.
+
+## Technologies Used
+
+- **Backend:** Built on the NestJS framework, the backend leverages the power of Node.js, providing a robust and scalable server-side solution. MongoDB is used as the database to store campaign and user data.
+
+- **Microservices:** The project employs a microservices architecture, allowing for the separation of concerns and scalability. Key microservices include campaigns, donations, user authentication, and notifications.
+
+- **Containerization:** Docker and Docker Compose are used for containerization, ensuring consistent deployment across different environments.
+
+- **Messaging:** RabbitMQ is used for message passing between microservices, enabling real-time updates and communication.
+
+- **Authentication:** JWT (JSON Web Tokens) authentication is implemented to secure user endpoints and protect sensitive user data.
 ## Installation
 
 ```bash
@@ -36,38 +55,26 @@ $ pnpm install
 
 ```bash
 # development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+$ docker-compose ip --build
 ```
 
-## Test
+## API routes
+Campaigns
+- POST /campaigns: Create a new campaign
+- GET /campaigns: Get a list of all campaigns
+- GET /campaigns/:campaignId: Retrieve details for a specific campaign
+- PATCH /campaigns/:campaignId: Update information for a specific campaign
+- DELETE /campaigns/:campaignId: Delete a specific campaign
+- GET /campaigns/search: Search for campaigns based on specific criteria
 
-```bash
-# unit tests
-$ pnpm run test
+Donations
+- GET /donations: Get a list of all donations
+- POST /donations: Make a donation to a campaign
+- GET /donations/user/:userId: Retrieve the donation history for a specific user
+- GET /donations/campaign/:campaignId: Get a list of donations made to a specific campaign
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Users
+- POST /users: Create a new user account
+- POST /users/login: Log in to an existing user account
+- GET /users/:userId: Retrieve user details
+- POST /users/logout: Log out of the user account
