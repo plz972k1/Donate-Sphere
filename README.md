@@ -55,7 +55,7 @@ $ pnpm install
 
 ```bash
 # development
-$ docker-compose ip --build
+$ docker-compose up --build
 ```
 
 ## API routes
