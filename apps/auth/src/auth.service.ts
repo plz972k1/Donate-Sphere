@@ -2,8 +2,7 @@ import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserInfo } from 'os';
-import { UserDocument } from './users/models/users.schema';
+import { UserDocument } from '@app/common';
 import { TokenPayload } from './interfaces/token-payload.interface';
 
 @Injectable()
