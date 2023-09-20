@@ -1,0 +1,27 @@
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 430576483707.dkr.ecr.us-east-1.amazonaws.com
+  build:
+    commands:
+      - docker build -t donations -f ./apps/donations/Dockerfile .
+      - docker tag donations:latest 430576483707.dkr.ecr.us-east-1.amazonaws.com/donations:latest
+
+      - docker build -t campaigns -f ./apps/campaigns/Dockerfile .
+      - docker tag campaigns:latest 430576483707.dkr.ecr.us-east-1.amazonaws.com/campaigns:latest
+
+      - docker build -t auth -f ./apps/auth/Dockerfile .
+      - docker tag auth:latest 430576483707.dkr.ecr.us-east-1.amazonaws.com/auth:latest
+
+      - docker build -t payments -f ./apps/payments/Dockerfile .
+      - docker tag payments:latest 430576483707.dkr.ecr.us-east-1.amazonaws.com/payments:latest
+
+      - docker build -t notifications -f ./apps/notifications/Dockerfile .
+      - docker tag notifications:latest 430576483707.dkr.ecr.us-east-1.amazonaws.com/notifications:latest
+  post_build:
+    commands:
+      - docker push 430576483707.dkr.ecr.us-east-1.amazonaws.com/donations:latest
+      - docker push 430576483707.dkr.ecr.us-east-1.amazonaws.com/campaigns:latest
+      - docker push 430576483707.dkr.ecr.us-east-1.amazonaws.com/auth:latest
+      - docker push 430576483707.dkr.ecr.us-east-1.amazonaws.com/payments:latest
+      - docker push 430576483707.dkr.ecr.us-east-1.amazonaws.com/notifications:latest
